@@ -1,13 +1,10 @@
 package com.cestpasdur.samples.restannuaire.resources;
 
-import com.cestpasdur.samples.restannuaire.domain.Contact;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.StreamingOutput;
-import javax.ws.rs.core.Response;
-import javax.xml.bind.JAXBElement;
-import java.io.OutputStream;
-import java.io.IOException;
+import com.cestpasdur.samples.restannuaire.domain.Contact;
 
 
 @Path("contact")
@@ -16,7 +13,7 @@ public class ContactResource {
 
     @GET
     @Path("/{id}")
-    @Produces("application/xml")
+    //@Produces("application/xml")
     public Contact getContactXML(@PathParam("id") int id) {
         Contact contact = new Contact();
         contact.setFirstName("Damien");
@@ -27,7 +24,7 @@ public class ContactResource {
 
     @GET
     @Path("/{id}")
-    @Produces("application/json")
+    //@Produces("application/json")
     public Contact getContactJSON(@PathParam("id") int id) {
         Contact contact = new Contact();
         contact.setFirstName("Damien");
