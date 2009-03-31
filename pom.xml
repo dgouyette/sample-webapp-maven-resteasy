@@ -13,19 +13,31 @@
             <artifactId>resteasy-jaxrs</artifactId>
             <version>1.0.2.GA</version>
         </dependency>
-         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.4</version>
-        </dependency>
 
-
-        <!-- Permet d'utiliser jaxb pour produire du xml a partir d'une ressource-->
+           <!-- Permet d'utiliser jaxb pour produire du xml a partir d'une ressource-->
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-jaxb-provider</artifactId>
             <version>1.0.2.GA</version>
         </dependency>
+
+        <dependency>
+            <groupId>httpunit</groupId>
+             <artifactId>httpunit</artifactId>
+            <version>1.6.1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.4</version>
+            <scope>test</scope>
+        </dependency>
+
+
+
+     
 
     </dependencies>
 
@@ -61,7 +73,7 @@
                         </connector>
                     </connectors>
                 </configuration>
-                <executions>
+                <!--executions>
                     <execution>
                         <id>start-jetty</id>
                         <phase>pre-integration-test</phase>
@@ -80,8 +92,10 @@
                             <goal>stop</goal>
                         </goals>
                     </execution>
-                </executions>
+                </executions-->
             </plugin>
+
+            
 
 
         </plugins>

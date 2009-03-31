@@ -5,6 +5,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 
 import com.cestpasdur.samples.restannuaire.domain.Contact;
+import javax.ws.rs.Produces;
 
 
 @Path("contact")
@@ -13,7 +14,7 @@ public class ContactResource {
 
     @GET
     @Path("/{id}")
-    //@Produces("application/xml")
+    @Produces("application/xml")
     public Contact getContactXML(@PathParam("id") int id) {
         Contact contact = new Contact();
         contact.setFirstName("Damien");
@@ -24,7 +25,7 @@ public class ContactResource {
 
     @GET
     @Path("/{id}")
-    //@Produces("application/json")
+    @Produces("application/json")
     public Contact getContactJSON(@PathParam("id") int id) {
         Contact contact = new Contact();
         contact.setFirstName("Damien");

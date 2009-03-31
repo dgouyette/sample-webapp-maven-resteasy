@@ -1,25 +1,52 @@
 package com.cestpasdur.samples.restannuaire.resources;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import javax.ws.rs.core.MediaType;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.PutMethod;
+import org.codehaus.jettison.json.JSONException;
+import org.jboss.resteasy.test.BaseResourceTest;
+import org.jboss.resteasy.test.TestPortProvider;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
-import junit.framework.Assert;
-import junit.framework.TestCase;
+public class ContactResourceTest extends BaseResourceTest {
 
-public class ContactResourceTest extends TestCase {
+    HttpClient client;
 
-	public void testRecupereContactJson() throws IOException {
-		URL postUrl = new URL("http://localhost:8080/restsample/rest/contact/1");
-		HttpURLConnection connection = (HttpURLConnection) postUrl.openConnection();
-		connection.setDoOutput(true);
-		//connection.setInstanceFollowRedirects(false);
-		connection.setRequestMethod("GET");
-		//connection.setRequestProperty("Content-Type", "application/xml");
-		
-		OutputStream os = connection.getOutputStream();
-	      System.out.println(connection.getContent());
-	    Assert.assertEquals(HttpURLConnection.HTTP_NO_CONTENT, connection.getResponseCode());
-	}
+    @Before
+    public void setUp() throws Exception {
+        dispatcher.getRegistry().addPerRequestResource(ContactResource.class);
+        client= new HttpClient();
+    }
+
+    @Test
+    public void getContactXml() throws IOException, JSONException {
+        GetMethod method = new GetMethod(TestPortProvider.generateURL("/contact/1"));
+        method.setRequestHeader("Accept", MediaType.APPLICATION_XML);
+        int status = client.executeMethod(method);
+        Assert.assertEquals(HttpStatus.SC_OK, status);
+    }
+
+    @Test
+    //Type de contenu non pris en charge
+    public void getContactText() throws IOException, JSONException {
+        GetMethod method = new GetMethod(TestPortProvider.generateURL("/contact/1"));
+        method.setRequestHeader("Accept", MediaType.TEXT_PLAIN);
+        int status = client.executeMethod(method);
+        Assert.assertEquals(HttpStatus.SC_NOT_ACCEPTABLE, status);
+    }
+
+
+
+    @Test
+    public void updateContact() {
+        PutMethod putMethod=new PutMethod();
+
+
+
+    }
 }
