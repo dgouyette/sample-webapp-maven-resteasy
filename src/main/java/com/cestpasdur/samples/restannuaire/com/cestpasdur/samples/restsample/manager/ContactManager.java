@@ -19,7 +19,7 @@ public class ContactManager {
     {
         Contact contact1 =new Contact("Damien", "Gouyette", "damien.gouyette@gmail.com");
         contacts.add(contact1);
-        Contact contact2 =new Contact("Damien", "Gouyette", "damien.gouyette@gmail.com");
+        Contact contact2 =new Contact("Dupond", "Marcel", "mdupond@gmail.com");
         contacts.add(contact2);
         
     }
