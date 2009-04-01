@@ -28,4 +28,13 @@ public class ContactManager {
         return contacts.get(id);
     }
 
+    public synchronized int addContact(final Contact contact) {
+        contacts.add(contact);
+        return contacts.indexOf(contact);
+    }
+
+    public synchronized void remove(final int id){
+        contacts.remove(id);
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.cestpasdur.samples.restannuaire.resources;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import javax.ws.rs.core.MediaType;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.JAXBContext;
@@ -10,8 +11,8 @@ import javax.xml.bind.JAXB;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.methods.PutMethod;
+import org.apache.commons.httpclient.NameValuePair;
+import org.apache.commons.httpclient.methods.*;
 import org.codehaus.jettison.json.JSONException;
 import org.jboss.resteasy.test.BaseResourceTest;
 import org.jboss.resteasy.test.TestPortProvider;
@@ -26,7 +27,6 @@ public class ContactResourceTest extends BaseResourceTest {
 
     HttpClient client;
 
-    HttpMethod method;
 
     @Before
     public void setUp() throws Exception {
@@ -34,40 +34,125 @@ public class ContactResourceTest extends BaseResourceTest {
         client = new HttpClient();
     }
 
+    /**
+     * CREATE **
+     */
+
     @Test
-    public void getContactXml() throws IOException, JSONException, JAXBException {
-        method = new GetMethod(TestPortProvider.generateURL("/contact/1"));
+    public void addContact() throws IOException {
+        PostMethod method = new PostMethod(TestPortProvider.generateURL("/contact/"));
+        method.setRequestEntity(new StringRequestEntity(
+                "<?xml version=\"1.0\"?>" +
+                        "<contact>" +
+                        "<firstName>Jolyne</firstName>" +
+                        "<lastName>MICHU</lastName>" +
+                        "</contact>",
+                "application/xml", null));
+        int status = client.executeMethod(method);
+        Assert.assertEquals(HttpStatus.SC_CREATED, status);
+        method.releaseConnection();
+    }
+
+
+    /**
+     * READ **
+     */
+
+    @Test
+    public void recupereContactXml() throws IOException {
+        GetMethod method = new GetMethod(TestPortProvider.generateURL("/contact/1"));
         method.setRequestHeader("Accept", MediaType.APPLICATION_XML);
         int status = client.executeMethod(method);
+        Assert.assertEquals(MediaType.APPLICATION_XML, method.getResponseHeader("content-type").getValue());
         Assert.assertEquals(HttpStatus.SC_OK, status);
-        String output=method.getResponseBodyAsString();
+    }
 
-
+    @Test
+    public void recupereContactJSON() throws IOException {
+        GetMethod method = new GetMethod(TestPortProvider.generateURL("/contact/2"));
+        method.setRequestHeader("Accept", MediaType.APPLICATION_JSON);
+        int status = client.executeMethod(method);
+        Assert.assertEquals(MediaType.APPLICATION_JSON, method.getResponseHeader("content-type").getValue());
+        Assert.assertEquals(HttpStatus.SC_OK, status);
     }
 
     @Test
     //Type de contenu non pris en charge
     public void getContactText() throws IOException, JSONException {
-        method = new GetMethod(TestPortProvider.generateURL("/contact/1"));
+        GetMethod method = new GetMethod(TestPortProvider.generateURL("/contact/1"));
         method.setRequestHeader("Accept", MediaType.TEXT_PLAIN);
         int status = client.executeMethod(method);
         Assert.assertEquals(HttpStatus.SC_NOT_ACCEPTABLE, status);
     }
 
+    @Test
+    //Ne doit pas retourner de contact existant (erreur 404)
+    public void recupereContactNotFound() throws IOException {
+        GetMethod method = new GetMethod(TestPortProvider.generateURL("/contact/3"));
+        method.setRequestHeader("Accept", MediaType.APPLICATION_XML);
+        int status = client.executeMethod(method);
+        Assert.assertEquals(HttpStatus.SC_NOT_FOUND, status);
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+    /**
+     * UPDATE **
+     */
 
     @Test
     public void updateContact() throws IOException {
-        method = new PutMethod(TestPortProvider.generateURL("/contact/"));
-
+        PutMethod method = new PutMethod(TestPortProvider.generateURL("/contact/1"));
+        method.setRequestEntity(new StringRequestEntity(
+                "<?xml version=\"1.0\"?>" +
+                        "<contact>" +
+                        "<firstName>Robert</firstName>" +
+                        "<lastName>DUFOUR</lastName>" +
+                        "</contact>",
+                "application/xml", null));
         int status = client.executeMethod(method);
-        Assert.assertEquals(204, status);
-        method.releaseConnection();
-
-
+        Assert.assertEquals(HttpStatus.SC_OK, status);
     }
 
-    @After
-    public void tearDown() {
-        method.releaseConnection();
+
+    /**
+     * DELETE **
+     */
+    @Test
+    //Supprime une ressource existante
+    public void removeContact() throws IOException {
+        DeleteMethod method = new DeleteMethod((TestPortProvider.generateURL("/contact/1")));
+        int status = client.executeMethod(method);
+        Assert.assertEquals(HttpStatus.SC_NO_CONTENT, status);
     }
+
+    @Test
+    //Supprimes une ressources inexistante
+    public void removeContactInexistant() throws IOException {
+        DeleteMethod method = new DeleteMethod((TestPortProvider.generateURL("/contact/43")));
+        int status = client.executeMethod(method);
+        Assert.assertEquals(HttpStatus.SC_NOT_FOUND, status);
+    }
+
 }

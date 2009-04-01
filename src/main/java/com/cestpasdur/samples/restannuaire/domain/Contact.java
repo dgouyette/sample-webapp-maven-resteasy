@@ -21,6 +21,15 @@ public class Contact {
         this.mail = mail;
     }
 
+    @Override
+    public String toString() {
+        return "Contact{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", mail='" + mail + '\'' +
+                '}';
+    }
+
     /**
      * propriétés *
      */
