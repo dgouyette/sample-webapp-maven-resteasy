@@ -21,12 +21,14 @@ public class ContactResourceTest {
 
     private final String URL_BASE = "http://localhost:8080/restsample/rest";
 
-
+     
    
 
     @Before
     public void setUp() throws Exception {
         client = new HttpClient();
+
+
     }
 
     /**
