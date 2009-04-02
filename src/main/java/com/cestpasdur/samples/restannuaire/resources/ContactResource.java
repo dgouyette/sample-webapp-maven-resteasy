@@ -1,15 +1,24 @@
 package com.cestpasdur.samples.restannuaire.resources;
 
-import com.cestpasdur.samples.restannuaire.com.cestpasdur.samples.restsample.manager.ContactManager;
-import com.cestpasdur.samples.restannuaire.domain.Contact;
-import org.jboss.resteasy.util.HttpResponseCodes;
-
-import javax.ws.rs.*;
-import javax.ws.rs.core.Response;
 import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+
+import org.jboss.resteasy.util.HttpResponseCodes;
+
+import com.cestpasdur.samples.restannuaire.domain.Contact;
 
 
 @Path("contact")
@@ -35,6 +44,15 @@ public class ContactResource {
      * Fin persistance **
      */
 
+    @POST
+    @Consumes("application/xml")
+    public Response AddContact(final Contact contact) throws URISyntaxException {
+        contactDB.put(idCounter.getAndIncrement(), contact);
+        System.out.println("ContactDB : "+contactDB.toString());
+        return Response.status(HttpResponseCodes.SC_CREATED).build();
+    }
+
+    
 
     @GET
     @Path("/{id}")
@@ -50,29 +68,24 @@ public class ContactResource {
     }
 
 
-    @POST
-    @Consumes("application/xml")
-    public Response AddContact(final Contact contact) throws URISyntaxException {
-        contactDB.put(idCounter.getAndIncrement(), contact);
-        return Response.status(HttpResponseCodes.SC_CREATED).build();
-    }
-
+  
 
     @PUT
     @Path("/{id}")
     @Consumes({"application/xml", "text/xml", "application/json"})
     public Response updateContact(@PathParam("id") final int id, final Contact contact) {
-        try {
+        
             Contact contactToUpdate = contactDB.get(id);
+            if (contactToUpdate==null)
+            {
+                   //Si le contact n'est pas trouve, on retourne le code "non trouve" ce qui est different de "pas de contenu"
+                   throw new WebApplicationException(Response.Status.NOT_FOUND);
+            }
             contactToUpdate.setFirstName(contact.getFirstName());
             contactToUpdate.setLastName(contact.getLastName());
             contactToUpdate.setMail(contact.getMail());
-        }
-        catch (IndexOutOfBoundsException e) {
-            //Si le contact n'est pas trouve, on retourne le code "non trouve" ce qui est different de "pas de contenu"
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
-        }
-        return Response.status(HttpResponseCodes.SC_OK).build();
+    
+     return Response.status(HttpResponseCodes.SC_OK).build();
     }
 
 
@@ -80,11 +93,12 @@ public class ContactResource {
     @Path("/{id}")
     public Response deleteContact(@PathParam("id") int id) {
 
-        try {
-            contactDB.remove(id);
-        }
-        catch (IndexOutOfBoundsException e) {
-            //Si le contact n'est pas trouve, on retourne le code "non trouve" ce qui est different de "pas de contenu"
+        
+        Contact contactRemoved=    contactDB.remove(id);
+        
+        if (contactRemoved==null)
+        {
+        	 //Si le contact n'est pas trouve, on retourne le code "non trouve" ce qui est different de "pas de contenu"
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
         return Response.status(HttpResponseCodes.SC_NO_CONTENT).build();

@@ -1,25 +1,26 @@
 package com.cestpasdur.samples.restannuaire.resources;
 
-import com.cestpasdur.samples.restannuaire.com.cestpasdur.samples.restsample.manager.ContactManager;
-import com.cestpasdur.samples.restannuaire.domain.Contact;
+import java.io.IOException;
+
+import javax.ws.rs.core.MediaType;
+
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.*;
+import org.apache.commons.httpclient.methods.DeleteMethod;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.PutMethod;
+import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.codehaus.jettison.json.JSONException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.ws.rs.core.MediaType;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 public class ContactResourceTest {
 
     HttpClient client;
 
-    private final String URL_BASE = "http://localhost:8080/restsample/rest";
+    private final String URL_BASE = "http://localhost:8888/restsample/rest";
 
      
    
@@ -59,7 +60,7 @@ public class ContactResourceTest {
 
     @Test
     public void recupereContactXml() throws IOException {
-        GetMethod method = new GetMethod(URL_BASE + "/contact/1");
+        GetMethod method = new GetMethod(URL_BASE + "/contact/0");
         method.setRequestHeader("Accept", MediaType.APPLICATION_XML);
         int status = client.executeMethod(method);
         Assert.assertEquals(MediaType.APPLICATION_XML, method.getResponseHeader("content-type").getValue());
@@ -68,7 +69,7 @@ public class ContactResourceTest {
 
     @Test
     public void recupereContactJSON() throws IOException {
-        GetMethod method = new GetMethod(URL_BASE + "/contact/2");
+        GetMethod method = new GetMethod(URL_BASE + "/contact/0");
         method.setRequestHeader("Accept", MediaType.APPLICATION_JSON);
         int status = client.executeMethod(method);
         Assert.assertEquals(MediaType.APPLICATION_JSON, method.getResponseHeader("content-type").getValue());
@@ -101,7 +102,7 @@ public class ContactResourceTest {
 
     @Test
     public void updateContact() throws IOException {
-        PutMethod method = new PutMethod(URL_BASE + "/contact/1");
+        PutMethod method = new PutMethod(URL_BASE + "/contact/0");
         method.setRequestEntity(new StringRequestEntity(
                 "<?xml version=\"1.0\"?>" +
                         "<contact>" +
@@ -136,7 +137,7 @@ public class ContactResourceTest {
     @Test
     //Supprime une ressource existante
     public void removeContact() throws IOException {
-        DeleteMethod method = new DeleteMethod(URL_BASE + "/contact/1");
+        DeleteMethod method = new DeleteMethod(URL_BASE + "/contact/0");
         int status = client.executeMethod(method);
         Assert.assertEquals(HttpStatus.SC_NO_CONTENT, status);
     }
