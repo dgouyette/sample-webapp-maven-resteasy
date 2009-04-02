@@ -1,8 +1,8 @@
 package com.cestpasdur.samples.restannuaire.resources;
 
 import javax.ws.rs.core.Application;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
 
 public class SampleApplication extends Application {
     private Set<Object> singletons = new HashSet<Object>();

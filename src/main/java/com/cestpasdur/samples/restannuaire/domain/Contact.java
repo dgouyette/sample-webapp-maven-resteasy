@@ -1,7 +1,7 @@
 package com.cestpasdur.samples.restannuaire.domain;
 
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class Contact {
