@@ -92,7 +92,15 @@ public class ContactResourceTest {
         method.setRequestHeader("Accept", MediaType.APPLICATION_XML);
         int status = client.executeMethod(method);
         Assert.assertEquals(HttpStatus.SC_NOT_FOUND, status);
+    }
 
+    @Test
+    public void recupereTousContacts() throws IOException {
+       GetMethod method = new GetMethod(URL_BASE + "/contact/all");
+        method.setRequestHeader("Accept", MediaType.APPLICATION_XML);
+        System.out.println(method.getResponseBodyAsString());
+        int status = client.executeMethod(method);
+        Assert.assertEquals(HttpStatus.SC_OK, status);
     }
 
 

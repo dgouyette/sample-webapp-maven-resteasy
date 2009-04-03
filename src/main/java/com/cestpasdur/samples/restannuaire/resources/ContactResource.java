@@ -2,6 +2,9 @@ package com.cestpasdur.samples.restannuaire.resources;
 
 import java.net.URISyntaxException;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -46,7 +49,7 @@ public class ContactResource {
 
     @POST
     @Consumes("application/xml")
-    public Response AddContact(final Contact contact) throws URISyntaxException {
+    public Response AjouteContact(final Contact contact) throws URISyntaxException {
         contactDB.put(idCounter.getAndIncrement(), contact);
         System.out.println("ContactDB : "+contactDB.toString());
         return Response.status(HttpResponseCodes.SC_CREATED).build();
@@ -57,15 +60,27 @@ public class ContactResource {
     @GET
     @Path("/{id}")
     @Produces({"application/xml", "application/json"})
-    public Contact getContactXML(@PathParam("id") int id) {
-        Contact retour = new Contact();
-
+    public Contact recupereContac(@PathParam("id") int id) {
+        Contact retour;
         retour = contactDB.get(id);
         if (retour == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
         return retour;
     }
+
+    @GET
+    @Path("/all/")
+    @Produces({"application/xml", "application/json"})
+    public Collection<Contact> recupereContacts()   {
+        Collection<Contact> contacts;
+        contacts=contactDB.values();
+        if (contacts == null) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
+        return contacts;
+    }
+
 
 
   
