@@ -1,10 +1,8 @@
 package com.cestpasdur.samples.restannuaire.resources;
 
 import java.net.URISyntaxException;
-import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -22,6 +20,7 @@ import javax.ws.rs.core.Response;
 import org.jboss.resteasy.util.HttpResponseCodes;
 
 import com.cestpasdur.samples.restannuaire.domain.Contact;
+import com.cestpasdur.samples.restannuaire.domain.Contacts;
 
 
 @Path("contact")
@@ -72,9 +71,9 @@ public class ContactResource {
     @GET
     @Path("/all/")
     @Produces({"application/xml", "application/json"})
-    public Collection<Contact> recupereContacts()   {
-        Collection<Contact> contacts;
-        contacts=contactDB.values();
+    public Contacts recupereContacts()   {
+        Contacts contacts=new Contacts();
+        contacts.setContacts(contactDB.values());
         if (contacts == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
@@ -107,8 +106,6 @@ public class ContactResource {
     @DELETE
     @Path("/{id}")
     public Response deleteContact(@PathParam("id") int id) {
-
-        
         Contact contactRemoved=    contactDB.remove(id);
         
         if (contactRemoved==null)
