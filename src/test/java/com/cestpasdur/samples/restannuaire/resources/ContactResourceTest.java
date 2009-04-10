@@ -105,13 +105,17 @@ public class ContactResourceTest {
 	public void recupereTousContacts() throws IOException, JAXBException {
 		GetMethod method = new GetMethod(URL_BASE + "/contact/all");
 		method.setRequestHeader("Accept", MediaType.APPLICATION_XML);
-		String result = method.getResponseBodyAsString();
-		int status = client.executeMethod(method);
-		Assert.assertEquals(HttpStatus.SC_OK, status);
+
+        int status = client.executeMethod(method);
+        Assert.assertEquals(HttpStatus.SC_OK, status);
+
+        String result = method.getResponseBodyAsString();
+        Assert.assertNotNull(result);
+
+
 
 		JAXBContext ctx = JAXBContext.newInstance(Contacts.class);
-		Contacts contacts = (Contacts) ctx.createUnmarshaller().unmarshal(
-				new StringReader(result));
+		Contacts contacts = (Contacts) ctx.createUnmarshaller().unmarshal(new StringReader(result));
 		Assert.assertEquals(1, contacts.getContacts().size());
 	}
 

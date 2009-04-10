@@ -50,7 +50,8 @@ public class ContactResource {
     @Consumes("application/xml")
     public Response AjouteContact(final Contact contact) throws URISyntaxException {
         contactDB.put(idCounter.getAndIncrement(), contact);
-        System.out.println("ContactDB : "+contactDB.toString());
+
+        //on retourne une réponse indiquant que l'entité à été crée
         return Response.status(HttpResponseCodes.SC_CREATED).build();
     }
 
@@ -67,6 +68,8 @@ public class ContactResource {
         }
         return retour;
     }
+
+    
 
     @GET
     @Path("/all/")

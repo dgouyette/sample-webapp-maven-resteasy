@@ -11,10 +11,10 @@
             var bindArgs = {
                 url: "rest/contact/1",
                 error: function(type, data, evt) {
-                    document.getElementById("output").value="An error occurred."
+                    document.getElementById("output").value = "An error occurred."
                 },
                 load: function(type, data, evt) {
-                    document.getElementById("output").value=data;
+                    document.getElementById("output").value = data;
                 },
                 mimetype: "text/plain",
                 formNode: document.getElementById("form1")
@@ -25,17 +25,17 @@
         }
         function reset()
         {
-            document.getElementById("output").value="";
+            document.getElementById("output").value = "";
         }
 
         function getContactJSONs() {
-           var bindArgs = {
+            var bindArgs = {
                 url: "rest/contact/1",
                 error: function(type, data, evt) {
-                    document.getElementById("output").value="An error occurred."
+                    document.getElementById("output").value = "An error occurred."
                 },
                 load: function(type, data, evt) {
-                    document.getElementById("output").value=data;
+                    document.getElementById("output").value = data;
                 },
                 mimetype: "application/json",
                 formNode: document.getElementById("form1")

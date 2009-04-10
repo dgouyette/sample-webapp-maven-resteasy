@@ -13,14 +13,14 @@ public class HelloResource {
     @GET
     @Path("/{qui}")
     public Response echoService(@PathParam("qui") String message) {
-        return Response.status(200).entity(message).build();
+        return Response.status(200).entity("hello "+message).build();
     }
 
     @GET
     @Path("/{qui}")
     @Produces("application/xml")
     public Response echoServiceXml(@PathParam("qui") String message) {
-        return Response.status(200).entity(message).build();
+        return Response.status(200).entity("hello "+message).build();
     }
 
 
