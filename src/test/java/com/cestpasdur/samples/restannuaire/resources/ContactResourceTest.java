@@ -1,33 +1,30 @@
 package com.cestpasdur.samples.restannuaire.resources;
 
-import java.io.IOException;
-import java.io.StringReader;
-
-import javax.ws.rs.core.MediaType;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-
+import com.cestpasdur.samples.restannuaire.domain.Contact;
+import com.cestpasdur.samples.restannuaire.domain.Contacts;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.DeleteMethod;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.PutMethod;
-import org.apache.commons.httpclient.methods.StringRequestEntity;
+import org.apache.commons.httpclient.methods.*;
 import org.codehaus.jettison.json.JSONException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.cestpasdur.samples.restannuaire.domain.Contact;
-import com.cestpasdur.samples.restannuaire.domain.Contacts;
+import javax.ws.rs.core.MediaType;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
+import java.io.StringReader;
 
+
+/**
+ * Test unitaire de la ressource REST contact
+ */
 public class ContactResourceTest {
 
 	HttpClient client;
 
-	private final String URL_BASE = "http://localhost:8888/restsample/rest";
+	private static final  String URL_BASE = "http://localhost:8888/restsample/rest";
 
 	@Before
 	public void setUp() throws Exception {
@@ -124,15 +121,22 @@ public class ContactResourceTest {
 	 */
 
 	@Test
-	public void updateContact() throws IOException {
+	public void updateContact() throws IOException, JAXBException {
 		PutMethod method = new PutMethod(URL_BASE + "/contact/0");
 		method.setRequestEntity(new StringRequestEntity(
 				"<?xml version=\"1.0\"?>" + "<contact>"
 						+ "<firstName>Robert</firstName>"
-						+ "<lastName>DUFOUR</lastName>" + "</contact>",
+						+ "<lastName>DUFOUR</lastName>"
+                        + "</contact>",
 				"application/xml", null));
 		int status = client.executeMethod(method);
 		Assert.assertEquals(HttpStatus.SC_OK, status);
+        //Nous verifions ensuite que la donnee recue a bien ete mise a jour
+
+        Contact contactUpdated = fromString(Contact.class, method.getResponseBodyAsString());
+        Assert.assertEquals("Robert", contactUpdated.getFirstName());
+        Assert.assertEquals("DUFOUR", contactUpdated.getLastName());
+
 	}
 
 	@Test

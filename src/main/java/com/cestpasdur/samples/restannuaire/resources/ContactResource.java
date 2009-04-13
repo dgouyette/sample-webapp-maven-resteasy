@@ -90,6 +90,7 @@ public class ContactResource {
     @PUT
     @Path("/{id}")
     @Consumes({"application/xml", "text/xml", "application/json"})
+    @Produces({"application/xml"})
     public Response updateContact(@PathParam("id") final int id, final Contact contact) {
         
             Contact contactToUpdate = contactDB.get(id);
@@ -101,8 +102,8 @@ public class ContactResource {
             contactToUpdate.setFirstName(contact.getFirstName());
             contactToUpdate.setLastName(contact.getLastName());
             contactToUpdate.setMail(contact.getMail());
-    
-     return Response.status(HttpResponseCodes.SC_OK).build();
+
+        return Response.ok(contactToUpdate).build();
     }
 
 
