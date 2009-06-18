@@ -11,14 +11,14 @@
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-jaxrs</artifactId>
-            <version>1.0.2.GA</version>
+           <version>1.1.GA</version>
         </dependency>
 
         <!-- Permet d'utiliser jaxb pour produire du xml a partir d'une ressource-->
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-jaxb-provider</artifactId>
-            <version>1.0.2.GA</version>
+           <version>1.1.GA</version>
         </dependency>
 
         <dependency>
@@ -52,7 +52,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-eclipse-plugin</artifactId>
-                <version>2.5.1</version>
+                <version>2.6</version>
                 <configuration>
                     <downloadSources>true</downloadSources>
                     <downloadJavadocs>false</downloadJavadocs>
