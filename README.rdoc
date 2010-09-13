@@ -1,0 +1,1 @@
+Code source correspondant à l'article : http://dgouyette.developpez.com/tutoriels/java/exposer-service-crud-restful-avec-jboss-resteasy/
